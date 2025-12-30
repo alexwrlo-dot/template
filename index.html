@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina Health - Medicina Integrativa</title>
+
+    <!-- Librerías necesarias del PDF -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2c5f5f;
+            --secondary-color: #7fb3b3;
+            --accent-color: #48a0a0;
+            --text-dark: #1a1a1a;
+            --text-light: #666;
+            --bg-light: #f0f7f7;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Header Navigation */
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 1rem 5%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .logo i {
+            color: var(--accent-color);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: var(--white);
+            padding: 0.8rem 1.8rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72,160,160,0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+            padding: 0.8rem 1.8rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-color);
+            color: var(--white);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(44, 95, 95, 0.9) 0%, rgba(72, 160, 160, 0.85) 100%),
+                        url('https://images.pexels.com/photos/3822621/pexels-photo-3822621.jpeg?auto=compress&cs=tinysrgb&w=1600');
+            /* 👆 FOTO 1: Fondo del hero - cambia esta URL por tu imagen */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 140px 5% 80px;
+            margin-top: 70px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+        }
+
+        .hero-text .accent {
+            color: #a3e4d7;
+        }
+
+        .hero-text p {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.95);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-buttons .btn-primary {
+            background: #a3e4d7;
+            color: var(--primary-color);
+        }
+
+        .hero-buttons .btn-secondary {
+            border-color: white;
+            color: white;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: white;
+            margin-top: 1rem;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .hero-image {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 400px;
+        }
+
+        .hero-card img {
+            width: 100%;
+            height: 280px;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            object-fit: cover;
+            display: block;
+        }
+
+        .testimonial {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            align-items: center;
+        }
+
+        .testimonial-avatars {
+            display: flex;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid white;
+            margin-left: -10px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .avatar:first-child {
+            margin-left: 0;
+        }
+
+        .stars {
+            color: #ffd700;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 80px 5%;
+            background: var(--white);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            text-transform: uppercase;
+            color: var(--accent-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .section-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: var(--white);
+            border: 2px solid #e0f2f2;
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            border-color: var(--accent-color);
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .icon-green {
+            background: #d4f4dd;
+            color: #34a853;
+        }
+
+        .icon-blue {
+            background: #d4e4f4;
+            color: #4285f4;
+        }
+
+        .icon-purple {
+            background: #ead4f4;
+            color: #a142f4;
+        }
+
+        .icon-orange {
+            background: #f4e4d4;
+            color: #f48342;
+        }
+
+        .icon-pink {
+            background: #f4d4e4;
+            color: #f44283;
+        }
+
+        .icon-teal {
+            background: #d4f4f4;
+            color: #42c3f4;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .service-card p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .service-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            background: var(--bg-light);
+            padding: 0.4rem 1rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            color: var(--primary-color);
+        }
+
+        .learn-more {
+            color: var(--accent-color);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .learn-more:hover {
+            gap: 1rem;
+        }
+
+        /* Philosophy Section */
+        .philosophy {
+            padding: 80px 5%;
+            background: var(--bg-light);
+        }
+
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .philosophy-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .philosophy-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 0;
+        }
+
+        /* 👇 FOTOS 2-4: Fondos de las tarjetas de filosofía */
+        .philosophy-card:nth-child(1)::before {
+            background-image: linear-gradient(rgba(255,255,255,0.95), rgba(255,255,255,0.95)),
+                              url('https://images.pexels.com/photos/3757954/pexels-photo-3757954.jpeg?auto=compress&cs=tinysrgb&w=600');
+        }
+
+        .philosophy-card:nth-child(2)::before {
+            background-image: linear-gradient(rgba(255,255,255,0.95), rgba(255,255,255,0.95)),
+                              url('https://images.pexels.com/photos/2280571/pexels-photo-2280571.jpeg?auto=compress&cs=tinysrgb&w=600');
+        }
+
+        .philosophy-card:nth-child(3)::before {
+            background-image: linear-gradient(rgba(255,255,255,0.95), rgba(255,255,255,0.95)),
+                              url('https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=600');
+        }
+
+        .philosophy-card:hover::before {
+            opacity: 1;
+        }
+
+        .philosophy-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .philosophy-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .philosophy-card i {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .philosophy-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        /* Team Section */
+        .team {
+            padding: 80px 5%;
+            background: var(--white);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .team-image {
+            width: 100%;
+            height: 350px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 👇 FOTOS 5-7: Fotos de los miembros del equipo */
+        .team-card:nth-child(1) .team-image {
+            background-image: url('https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=600');
+        }
+
+        .team-card:nth-child(2) .team-image {
+            background-image: url('https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg?auto=compress&cs=tinysrgb&w=600');
+        }
+
+        .team-card:nth-child(3) .team-image {
+            background-image: url('https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg?auto=compress&cs=tinysrgb&w=600');
+        }
+
+        .team-specialty {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.95);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            backdrop-filter: blur(10px);
+        }
+
+        .team-info {
+            padding: 1.5rem;
+        }
+
+        .team-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .team-info .credentials {
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .team-info p {
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* Blog Section */
+        #blog-section {
+            padding: 80px 5%;
+            background: var(--bg-light);
+        }
+
+        #blog-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .blog-card-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .blog-card-content {
+            padding: 2rem;
+        }
+
+        .blog-card h3 {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .blog-card p {
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-card button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .blog-card button:hover {
+            background: var(--primary-color);
+        }
+
+        /* Modal */
+        #article-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #article-modal > div {
+            background: white;
+            color: black;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        #article-modal button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* Contact Section */
+        #contact-section {
+            padding: 80px 5%;
+            background: var(--white);
+        }
+
+        .contact-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--bg-light);
+            padding: 3rem;
+            border-radius: 20px;
+        }
+
+        #my-form input,
+        #my-form textarea {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid #e0f2f2;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        #my-form input:focus,
+        #my-form textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        #my-form button {
+            width: 100%;
+        }
+
+        #form-status {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 80px 5%;
+            background: linear-gradient(135deg, rgba(44, 95, 95, 0.95) 0%, rgba(72, 160, 160, 0.9) 100%),
+                        url('https://images.pexels.com/photos/3760263/pexels-photo-3760263.jpeg?auto=compress&cs=tinysrgb&w=1600');
+            /* 👆 FOTO 8: Fondo de la sección CTA - cambia esta URL por tu imagen */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .btn-white:hover {
+            background: var(--bg-light);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 60px 5% 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto 3rem;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-column a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+            color: #888;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--accent-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background: white;
+                width: 100%;
+                padding: 2rem;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                transition: left 0.3s;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .services-grid,
+            .philosophy-grid,
+            .team-grid,
+            #blog-list {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .cta h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-spa"></i>
+                <span>Lumina Health</span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Inicio</a></li>
+                <li><a href="#services">Servicios</a></li>
+                <li><a href="#philosophy">Filosofía</a></li>
+                <li><a href="#team">Equipo</a></li>
+                <li><a href="#blog-section">Blog</a></li>
+                <li><a href="#contact-section" class="btn-primary">Agendar Consulta</a></li>
+            </ul>
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <span class="badge"><i class="fas fa-leaf"></i> Centro de Sanación Holística</span>
+                <h1>Restaura tu Balance, <span class="accent">Naturalmente.</span></h1>
+                <p>Combinamos la sabiduría ancestral con la ciencia moderna para activar el potencial innato de sanación de tu cuerpo. Cuidado personalizado para condiciones crónicas, equilibrio hormonal y vitalidad.</p>
+                <div class="hero-buttons">
+                    <a href="#contact-section" class="btn-primary">Comienza tu Jornada</a>
+                    <a href="#services" class="btn-secondary">Explorar Servicios</a>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-avatars">
+                        <!-- 👇 FOTOS 9-11: Avatares de testimonios -->
+                        <div class="avatar" style="background-image: url('https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100');"></div>
+                        <div class="avatar" style="background-image: url('https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100');"></div>
+                        <div class="avatar" style="background-image: url('https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=100');"></div>
+                    </div>
+                    <div>
+                        <div class="stars">★★★★★</div>
+                        <small style="color: white;">Pacientes Felices Sanando</small>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-card">
+                    <!-- 👇 FOTO 12: Imagen principal de la tarjeta del hero -->
+                    <img src="https://images.pexels.com/photos/3822906/pexels-photo-3822906.jpeg?auto=compress&cs=tinysrgb&w=500" alt="Meditación y Bienestar">
+                    <div style="margin-top: 1rem;">
+                        <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">Armonía Mente-Cuerpo</h3>
+                        <p style="color: var(--text-light); font-size: 0.95rem;">Descubre la raíz de la sanación</p>
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            <span class="badge" style="background: var(--bg-light); color: var(--primary-color);"><i class="fas fa-leaf"></i> Medicina Botánica</span>
+                            <span class="badge" style="background: var(--bg-light); color: var(--primary-color);"><i class="fas fa-microscope"></i> Pruebas Científicas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="section-header">
+            <div class="section-label">Nuestro Enfoque de Bienestar</div>
+            <h2>Sanación, Naturalmente.</h2>
+            <p>Integramos sabiduría tradicional con diagnósticos modernos para tratar la causa raíz de la enfermedad, no solo los síntomas. Explora nuestra gama integral de terapias naturales.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon icon-green">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3>Medicina Naturopática</h3>
+                <p>Atención primaria holística que enfatiza la prevención, el tratamiento y la salud óptima mediante el uso de métodos terapéuticos y sustancias que fomentan la auto-sanación.</p>
+                <div class="service-tags">
+                    <span class="tag">Botánica</span>
+                    <span class="tag">Estilo de Vida</span>
+                </div>
+                <a href="#contact-section" class="learn-more">Conocer más <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon icon-blue">
+                    <i class="fas fa-tint"></i>
+                </div>
+                <h3>Terapia Vitamínica IV</h3>
+                <p>Entrega vitaminas y minerales esenciales directamente en el torrente sanguíneo para máxima absorción. Aumenta inmunidad, energía e hidratación instantáneamente.</p>
+                <div class="service-tags">
+                    <span class="tag">Hidratación</span>
+                    <span class="tag">Inmunidad</span>
+                </div>
+                <a href="#contact-section" class="learn-more">Conocer más <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon icon-purple">
+                    <i class="fas fa-hand-holding-medical"></i>
+                </div>
+                <h3>Acupuntura & MTC</h3>
+                <p>Técnicas ancestrales chinas para equilibrar la energía del cuerpo y el flujo Qi. Efectivo para manejo del dolor, alivio del estrés y trastornos digestivos.</p>
+                <div class="service-tags">
+                    <span class="tag">Alivio del Dolor</span>
+                    <span class="tag">Balance</span>
+                </div>
+                <a href="#contact-section" class="learn-more">Conocer más <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon icon-orange">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <h3>Nutrición Clínica</h3>
+                <p>La comida es medicina. Creamos planes dietéticos personalizados para abordar inflamación, manejo de peso y condiciones crónicas basadas en tu biología única.</p>
+                <div class="service-tags">
+                    <span class="tag">Planes de Dieta</span>
+                    <span class="tag">Salud Intestinal</span>
+                </div>
+                <a href="#contact-section" class="learn-more">Conocer más <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon icon-teal">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <h3>Pruebas de Laboratorio Funcional</h3>
+                <p>Pruebas diagnósticas avanzadas para descubrir desequilibrios hormonales, sensibilidades alimentarias, metales pesados y deficiencias de micronutrientes.</p>
+                <div class="service-tags">
+                    <span class="tag">Diagnóstico</span>
+                    <span class="tag">Hormonas</span>
+                </div>
+                <a href="#contact-section" class="learn-more">Conocer más <i class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon icon-pink">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3>Consejería Mente-Cuerpo</h3>
+                <p>Abordando los aspectos mentales y emocionales de la sanación. Las técnicas incluyen mindfulness, reducción del estrés y estrategias conductuales.</p>
+                <div class="service-tags">
+                    <span class="tag">Salud Mental</span>
+                    <span class="tag">Bienestar</span>
+                </div>
+                <a href="#contact-section" class="learn-more">Conocer más <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section class="philosophy" id="philosophy">
+        <div class="section-header">
+            <div class="section-label">Nuestra Filosofía</div>
+            <h2>Sanación Holística Redefinida</h2>
+        </div>
+        <div class="philosophy-grid">
+            <div class="philosophy-card">
+                <i class="fas fa-brain"></i>
+                <h3>Conexión Mente-Cuerpo</h3>
+                <p>Creemos que la salud física está intrínsecamente ligada al bienestar emocional. Nuestros protocolos abordan estrés, sueño y claridad mental junto con síntomas físicos.</p>
+            </div>
+            <div class="philosophy-card">
+                <i class="fas fa-microscope"></i>
+                <h3>Ciencia & Naturaleza</h3>
+                <p>Utilizando diagnósticos científicos avanzados junto a terapias naturales informadas. Combinamos la precisión del laboratorio moderno con el poder sanador de los botánicos.</p>
+            </div>
+            <div class="philosophy-card">
+                <i class="fas fa-users"></i>
+                <h3>Cuidado Colaborativo</h3>
+                <p>Eres el experto de tu propio cuerpo. Nos asociamos contigo, escuchando profundamente tu historia para co-crear un plan de tratamiento que se adapte a tu estilo de vida.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team" id="team">
+        <div class="section-header">
+            <div class="section-label">Nuestro Equipo</div>
+            <h2>Conoce a los Practicantes</h2>
+            <p>Profesionales dedicados con especialidades diversas, unidos por una pasión por la sanación integrativa.</p>
+        </div>
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-image">
+                    <div class="team-specialty">Doctora Naturopática</div>
+                </div>
+                <div class="team-info">
+                    <h3>Dra. Elena Voss</h3>
+                    <p class="credentials">MS, LMC</p>
+                    <p>La Dra. Voss se especializa en salud hormonal de la mujer y condiciones autoinmunes. Combina medicina china tradicional con diagnósticos avanzados para crear protocolos personalizados.</p>
+                </div>
+            </div>
+
+            <div class="team-card">
+                <div class="team-image">
+                    <div class="team-specialty">Medicina Funcional</div>
+                </div>
+                <div class="team-info">
+                    <h3>Dr. Marcus Chen</h3>
+                    <p class="credentials">RBJ, FMCP</p>
+                    <p>Con experiencia en medicina interna, el Dr. Chen se enfoca en salud intestinal y longevidad. Utiliza diagnósticos avanzados para crear planes de sanación precisos.</p>
+                </div>
+            </div>
+
+            <div class="team-card">
+                <div class="team-image">
+                    <div class="team-specialty">Nutricionista Clínica</div>
+                </div>
+                <div class="team-info">
+                    <h3>Sarah Kline</h3>
+                    <p class="credentials">MS, CNS</p>
+                    <p>Sarah es apasionada de la comida como medicina. Ayuda a los pacientes a navegar sensibilidades alimentarias y crear planes de comidas sostenibles y deliciosos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog-section">
+        <div class="section-header">
+            <div class="section-label">Recursos & Sabiduría</div>
+            <h2>Nuestro Blog</h2>
+            <p>Explora artículos sobre salud holística, bienestar y terapias naturales.</p>
+        </div>
+        <div id="blog-list">
+            <p>Cargando artículos...</p>
+        </div>
+    </section>
+
+    <!-- Modal para artículos -->
+    <div id="article-modal">
+        <div>
+            <button onclick="document.getElementById('article-modal').style.display='none'">×</button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <section id="contact-section">
+        <div class="section-header">
+            <div class="section-label">¿Listo para comenzar?</div>
+            <h2>Agenda tu Consulta</h2>
+            <p>Agenda tu consulta inicial gratuita o llamada de descubrimiento de 15 minutos para ver si nuestro enfoque integrativo es el adecuado para tus objetivos de salud.</p>
+        </div>
+        <div class="contact-container">
+            <form action="https://formspree.io/f/TU_ID_AQUI" method="POST" id="my-form">
+                <input type="text" name="name" placeholder="Nombre completo" required>
+                <input type="email" name="email" placeholder="Correo electrónico" required>
+                <input type="tel" name="phone" placeholder="Teléfono">
+                <textarea name="message" placeholder="Cuéntanos sobre tus objetivos de salud..." rows="5"></textarea>
+                <button type="submit" class="btn-primary">Enviar Mensaje</button>
+                <p id="form-status" style="display:none;"></p>
+            </form>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <h2>¿Listo para Recuperar tu Vitalidad?</h2>
+        <p>Comienza tu jornada hacia la salud óptima hoy. Agenda tu consulta inicial o llamada de descubrimiento gratuita.</p>
+        <div class="cta-buttons">
+            <a href="#contact-section" class="btn-primary btn-white">Agendar Nueva Consulta</a>
+            <a href="#services" class="btn-secondary" style="color: white; border-color: white;">Ver Precios</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-column">
+                <div class="logo" style="color: white; margin-bottom: 1rem;">
+                    <i class="fas fa-spa"></i>
+                    <span>Lumina Health</span>
+                </div>
+                <p style="color: #ccc; line-height: 1.7;">Medicina Natural Integrativa para el mundo moderno. Restaurando balance, naturalmente.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h3>Práctica</h3>
+                <ul>
+                    <li><a href="#services">Sobre Nosotros</a></li>
+                    <li><a href="#team">Nuestro Equipo</a></li>
+                    <li><a href="#services">Servicios</a></li>
+                    <li><a href="#contact-section">Carreras</a></li>
+                    <li><a href="#contact-section">Contacto</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h3>Servicios</h3>
+                <ul>
+                    <li><a href="#services">Naturopatía</a></li>
+                    <li><a href="#services">Acupuntura</a></li>
+                    <li><a href="#services">Terapia IV</a></li>
+                    <li><a href="#services">Nutrición</a></li>
+                    <li><a href="#services">Terapia de Masaje</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h3>Contacto</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Calle del Bienestar 123, Ibarra, Ecuador</li>
+                    <li><i class="fas fa-phone"></i> (593) 555-0123</li>
+                    <li><i class="fas fa-envelope"></i> hola@luminahealth.com</li>
+                    <li><a href="#">Portal de Pacientes</a></li>
+                    <li><a href="#">Nuevos Formularios de Pacientes</a></li>
+                    <li><a href="#">Información de Seguro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 Lumina Health - Medicina Integrativa. Todos los derechos reservados. | <a href="#" style="color: #888;">Política de Privacidad</a> | <a href="#" style="color: #888;">Términos de Servicio</a></p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // --- CONFIGURACIÓN (¡CAMBIA ESTO!) ---
+        const GITHUB_USER = "TU_USUARIO_GITHUB";
+        const GITHUB_REPO = "NOMBRE_DE_TU_REPO";
+        const BLOG_FOLDER = "blog";
+
+        // 👇 FOTOS 13-15: URLs de imágenes para el blog
+        const BLOG_IMAGES = [
+            'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400',
+            'https://images.pexels.com/photos/1092730/pexels-photo-1092730.jpeg?auto=compress&cs=tinysrgb&w=400',
+            'https://images.pexels.com/photos/3768894/pexels-photo-3768894.jpeg?auto=compress&cs=tinysrgb&w=400'
+        ];
+
+        // --- 1. MENÚ MÓVIL ---
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('active');
+            });
+        });
+
+        // --- 2. SMOOTH SCROLL ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // --- 3. LÓGICA DEL BLOG ---
+        let loadedPosts = [];
+
+        async function loadBlog() {
+            const container = document.getElementById('blog-list');
+            try {
+                const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${BLOG_FOLDER}`);
+                const files = await res.json();
+
+                const mdFiles = files.filter(f => f.name.endsWith('.md'));
+
+                if (mdFiles.length === 0) {
+                    showExampleArticles(container);
+                    return;
+                }
+
+                container.innerHTML = "";
+                loadedPosts = [];
+
+                for (let i = 0; i < mdFiles.length; i++) {
+                    const f = mdFiles[i];
+                    const rawText = await (await fetch(f.download_url)).text();
+
+                    let title = f.name.replace('.md', '').replace(/-/g, ' ');
+                    let body = rawText;
+
+                    const parts = rawText.split('---');
+                    if (parts.length >= 3) {
+                        const titleMatch = parts[1].match(/title:\s*(.*)/);
+                        if (titleMatch) title = titleMatch[1].replace(/["']/g, "").trim();
+                        body = parts.slice(2).join('---');
+                    }
+
+                    loadedPosts.push({ title, content: body });
+
+                    const preview = marked.parse(body).replace(/<[^>]*>?/gm, '').substring(0, 150);
+                    const blogImage = BLOG_IMAGES[i % BLOG_IMAGES.length];
+
+                    container.innerHTML += `
+                        <div class="blog-card">
+                            <div class="blog-card-image" style="background-image: url('${blogImage}')"></div>
+                            <div class="blog-card-content">
+                                <h3>${title}</h3>
+                                <p>${preview}...</p>
+                                <button onclick="openModal(${i})">Leer más</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                showExampleArticles(container);
+            }
+        }
+
+        function showExampleArticles(container) {
+            const exampleArticles = [
+                {
+                    title: "Beneficios de la Medicina Integrativa",
+                    preview: "Descubre cómo la medicina integrativa combina lo mejor de ambos mundos: tratamientos naturales y ciencia moderna para una salud óptima...",
+                    image: BLOG_IMAGES[0]
+                },
+                {
+                    title: "Nutrición para el Bienestar",
+                    preview: "La alimentación es la base de una vida saludable. Aprende qué alimentos pueden transformar tu salud y potenciar tu vitalidad...",
+                    image: BLOG_IMAGES[1]
+                },
+                {
+                    title: "Mindfulness y Reducción del Estrés",
+                    preview: "Técnicas prácticas de mindfulness que puedes aplicar en tu día a día para reducir el estrés y mejorar tu bienestar emocional...",
+                    image: BLOG_IMAGES[2]
+                }
+            ];
+
+            container.innerHTML = exampleArticles.map((article, i) => `
+                <div class="blog-card">
+                    <div class="blog-card-image" style="background-image: url('${article.image}')"></div>
+                    <div class="blog-card-content">
+                        <h3>${article.title}</h3>
+                        <p>${article.preview}</p>
+                        <button onclick="alert('Artículo de ejemplo. Configura tu blog en GitHub para ver contenido real.')">Leer más</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- 4. LÓGICA DEL MODAL ---
+        function openModal(index) {
+            const post = loadedPosts[index];
+            const modal = document.getElementById('article-modal');
+            const body = document.getElementById('modal-body');
+
+            body.innerHTML = `<h1>${post.title}</h1>` + marked.parse(post.content);
+            modal.style.display = 'flex';
+        }
+
+        document.getElementById('article-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+
+        // --- 5. LÓGICA DE FORMSPREE ---
+        const form = document.getElementById("my-form");
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const status = document.getElementById("form-status");
+            const data = new FormData(e.target);
+
+            try {
+                const response = await fetch(e.target.action, {
+                    method: form.method,
+                    body: data,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    status.innerHTML = "✓ ¡Gracias! Tu mensaje ha sido enviado exitosamente.";
+                    status.style.display = "block";
+                    status.style.background = "#d4f4dd";
+                    status.style.color = "#34a853";
+                    form.reset();
+                } else {
+                    throw new Error();
+                }
+            } catch (error) {
+                status.innerHTML = "✗ Hubo un error al enviar tu mensaje. Por favor intenta de nuevo.";
+                status.style.display = "block";
+                status.style.background = "#f4d4d4";
+                status.style.color = "#d32f2f";
+            }
+        });
+
+        // --- 6. INICIALIZAR ---
+        document.addEventListener('DOMContentLoaded', loadBlog);
+
+        // --- 7. SCROLL EFFECTS ---
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.boxShadow = '0 5px 20px rgba(0,0,0,0.1)';
+            } else {
+                header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+            }
+        });
+    </script>
+</body>
+</html>
